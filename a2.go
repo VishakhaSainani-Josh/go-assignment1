@@ -12,7 +12,7 @@ import (
 )
 
 func main(){
-	var radius float64
+	var radius float64  
 	fmt.Scan(&radius)
 
 	var area float64
