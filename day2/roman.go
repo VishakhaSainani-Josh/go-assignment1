@@ -18,7 +18,7 @@ func integer_value(roman_letter byte ) int{
 	
 }
 
-func convert_roman_to_integer(roman string) int{
+func convertRomanToInteger(roman string) int{
 	var result int
 	for i:=0;i<len(roman);i++ {
 		s1:=integer_value(roman[i]);
@@ -40,10 +40,10 @@ func convert_roman_to_integer(roman string) int{
 
 func main(){
 	
-	var roman_val string
-	fmt.Scanf("%s",&roman_val)
+	var romanVal string
+	fmt.Scanf("%s",&romanVal)
 
-	result:=convert_roman_to_integer(roman_val)
+	result:=convertRomanToInteger(romanVal)
 
 	fmt.Println(result)
 
