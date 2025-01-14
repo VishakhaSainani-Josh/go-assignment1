@@ -8,12 +8,15 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"math"
 )
 
 func main(){
 	var radius float64  
-	fmt.Scan(&radius)
+	if _,err:=fmt.Scan(&radius);err!=nil{
+		log.Fatal("Error Accepting Input")
+	}
 
 	var area float64
 	area=math.Pi *math.Pow(radius,2)

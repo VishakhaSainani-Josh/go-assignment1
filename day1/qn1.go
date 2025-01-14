@@ -39,9 +39,9 @@ if err!=nil{
 	log.Fatal("error invalid time ")
 }
 
-var simple_interest float64 
-simple_interest=(principal*rate*time)/100
+var simpleInterest float64 
+simpleInterest=(principal*rate*time)/100
 
-fmt.Printf("simple interest %.2f",simple_interest)
+fmt.Printf("simple interest %.2f",simpleInterest)
 
 }
