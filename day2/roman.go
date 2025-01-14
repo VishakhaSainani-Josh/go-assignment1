@@ -4,7 +4,7 @@ import (
 	"fmt"
 )
 
-func integer_value(roman_letter byte ) int{
+func integerValue(romanLetter byte ) int{
 	m:=map[byte]int{
 		'I':1,
 		'V':5,
@@ -14,16 +14,16 @@ func integer_value(roman_letter byte ) int{
 		'D':500,
 		'M':1000,
 	}
-	return m[roman_letter]
+	return m[romanLetter]
 	
 }
 
 func convertRomanToInteger(roman string) int{
 	var result int
 	for i:=0;i<len(roman);i++ {
-		s1:=integer_value(roman[i]);
+		s1:=integerValue(roman[i]);
 		if i+1<len(roman) {
-			s2:=integer_value(roman[i+1])
+			s2:=integerValue(roman[i+1])
 
 			if s2<=s1{
 				result+=s1
