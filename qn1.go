@@ -13,25 +13,29 @@ import (
 
 func main(){
 var input string
+var err error
 
-if _,err:=fmt.Scan(&input);err!=nil{
+if _,err=fmt.Scan(&input);err!=nil{
 	log.Fatal("Error accepting input")
 }
 
 result:=strings.Split(input, ",")
 
-var principal,e1 =strconv.ParseFloat(result[0],64)
-if e1!=nil{
+var principal float64
+principal,err =strconv.ParseFloat(result[0],64)
+if err!=nil{
 	log.Fatal("error invalid principal amount")
 }
 
-var rate,e2 =strconv.ParseFloat(result[1],64)
-if e2!=nil{
+var rate float64
+rate,err =strconv.ParseFloat(result[1],64)
+if err!=nil{
 	log.Fatal("error invalid rate")
 }
 
-var time,e3 =strconv.ParseFloat(result[2],64)
-if e3!=nil{
+var time float64
+time,err =strconv.ParseFloat(result[2],64)
+if err!=nil{
 	log.Fatal("error invalid time ")
 }
 
