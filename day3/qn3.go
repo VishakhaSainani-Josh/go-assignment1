@@ -29,24 +29,24 @@ import (
 	"log"
 )
 
-func main(){
+func main() {
 
-	arr:=[8]string{"qwe", "wer", "ert", "rty", "tyu", "yui", "uio", "iop"}
+	arr := [8]string{"qwe", "wer", "ert", "rty", "tyu", "yui", "uio", "iop"}
 	var index1 int
 	var index2 int
-	
-	if _,err:=fmt.Scan(&index1);err!=nil || index1<0 || index1>7 {
-		log.Fatal("Incorrect Index")
-	}
-	
-	if _,err:=fmt.Scan(&index2);err!=nil || index2<0 || index2>7 {
+
+	if _, err := fmt.Scan(&index1); err != nil || index1 < 0 || index1 > 7 || index1 > index2 {
 		log.Fatal("Incorrect Index")
 	}
 
-	s1:=arr[:index1+1]
-	s2:=arr[index1:index2+1]
-	s3:=arr[index2:]
+	if _, err := fmt.Scan(&index2); err != nil || index2 < 0 || index2 > 7 {
+		log.Fatal("Incorrect Index")
+	}
 
-	fmt.Printf("%v\n%v\n%v",s1,s2,s3)
+	s1 := arr[:index1+1]
+	s2 := arr[index1 : index2+1]
+	s3 := arr[index2:]
+
+	fmt.Printf("%v\n%v\n%v", s1, s2, s3)
 
 }
