@@ -21,28 +21,28 @@ import (
 	"log"
 )
 
-func findTheDay(val int)string{
-	
-	if(val>7){
-		return "Not a day"
-	}
-	
+func findTheDay(val int) string {
+
 	day := map[int]string{
-		1:"Monday",
-		2:"Tuesday",
-		3:"Wednesday",
-		4:"Thursday",
-		5:"Friday",
-		6:"Saturday",
-		7:"Sunday",
+		1: "Monday",
+		2: "Tuesday",
+		3: "Wednesday",
+		4: "Thursday",
+		5: "Friday",
+		6: "Saturday",
+		7: "Sunday",
 	}
 
-	return day[val]
-	
+	if res, ok := day[val]; !ok {
+		return "Not a day"
+	} else {
+		return res
+	}
 }
-func main(){
+
+func main() {
 	var input int
-	if _,err:=fmt.Scan(&input);err!=nil{
+	if _, err := fmt.Scan(&input); err != nil {
 		log.Fatal(err)
 	}
 	fmt.Println(findTheDay(input))
