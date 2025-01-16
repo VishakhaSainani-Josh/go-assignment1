@@ -22,33 +22,38 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"log"
 	"os"
 	"strings"
 )
 
-func main(){
+func main() {
 
-	scanner:=bufio.NewReader(os.Stdin)
-	input,_:=scanner.ReadString('\n')
-
-	s:=strings.Fields(input) //returns a slice
-
-	wordFreq:=map[string]int{}
-	var order[]string
-	var maxFreq int =0
-	
-	for _,word:= range s{
-		if _,exist:=wordFreq[word];!exist{
-			order=append(order, word)
-		}
-	 	wordFreq[word]++
-		maxFreq=max(wordFreq[word],maxFreq)
+	scanner := bufio.NewReader(os.Stdin)
+	input, err := scanner.ReadString('\n')
+	if err != nil {
+		log.Fatal(err)
 	}
 
-	var result[]string
-	for _,word:=range order{
-		if maxFreq==wordFreq[word]{
-			result=append(result, word)
+	s := strings.Fields(input) //returns a slice
+
+	wordFreq := make(map[string]int)
+	order := make([]string, 3)
+	var maxFreq int = 0
+
+	for _, word := range s {
+		if _, exist := wordFreq[word]; !exist {
+			order = append(order, word)
+		}
+		wordFreq[word]++
+		maxFreq = max(wordFreq[word], maxFreq)
+	}
+
+	var result []string
+
+	for _, word := range order {
+		if maxFreq == wordFreq[word] {
+			result = append(result, word)
 		}
 	}
 
