@@ -39,7 +39,7 @@ func main(){
 		log.Fatal("Incorrect Index")
 	}
 	
-	if _,err:=fmt.Scan(&index2);err!=nil{
+	if _,err:=fmt.Scan(&index2);err!=nil || index2<0 || index2>7 {
 		log.Fatal("Incorrect Index")
 	}
 
