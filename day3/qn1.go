@@ -33,11 +33,11 @@ func findTheDay(val int) string {
 		7: "Sunday",
 	}
 
-	if res, ok := day[val]; !ok {
-		return "Not a day"
-	} else {
+	if res, ok := day[val]; ok {
 		return res
 	}
+	return "Not a day"
+
 }
 
 func main() {
