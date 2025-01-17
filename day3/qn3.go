@@ -35,12 +35,17 @@ func main() {
 	var index1 int
 	var index2 int
 
-	if _, err := fmt.Scan(&index1); err != nil || index1 < 0 || index1 > 7 || index1 > index2 {
+	if _, err := fmt.Scan(&index1); err != nil || index1 < 0 || index1 > 7 {
 		log.Fatal("Incorrect Index")
 	}
 
 	if _, err := fmt.Scan(&index2); err != nil || index2 < 0 || index2 > 7 {
 		log.Fatal("Incorrect Index")
+	}
+
+	if index1 > index2 {
+		log.Fatal("Incorrect Index")
+
 	}
 
 	s1 := arr[:index1+1]
