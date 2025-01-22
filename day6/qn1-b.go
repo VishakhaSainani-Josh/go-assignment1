@@ -19,36 +19,44 @@ import (
 func main() {
 	var msg string = "helloBob$helloalice#howareyou?#Iamgood.howareyou?$^"
 	var dialogue string
+	
 	alice := make(chan string)
 	bob := make(chan string)
-	go func() {
-		for {
-			select {
-			case aliceMsg := <-alice:
-				fmt.Printf("alice : %s,", aliceMsg)
 
-			case bobMsg := <-bob:
-				fmt.Printf("bob : %s,", bobMsg)
+	go func() {
+		for _, i := range msg {
+			if i == '$' {
+				alice <- dialogue
+				dialogue = ""
+				continue
+			} else if i == '#' {
+				bob <- dialogue
+				dialogue = ""
+				continue
+			} else if i == '^' {
+				close(alice)
+				close(bob)
+				break
+			} else {
+				dialogue = dialogue + string(i)
 			}
 		}
 	}()
 
-	for _, i := range msg {
-		if i == '$' {
-			alice <- dialogue
-			dialogue = ""
-			continue
-		} else if i == '#' {
-			bob <- dialogue
-			dialogue = ""
-			continue
-		} else if i == '^' {
-			break
-		}
-		dialogue = dialogue + string(i)
-	}
+	for {
+		select {
+		case aliceMsg, ok := <-alice:
+			if !ok {
+				return
+			}
+			fmt.Printf("alice : %s,", aliceMsg)
+		case bobMsg, ok := <-bob:
+			if !ok {
+				return
+			}
+			fmt.Printf("bob : %s,", bobMsg)
 
-	close(alice)
-	close(bob)
+		}
+	}
 
 }
