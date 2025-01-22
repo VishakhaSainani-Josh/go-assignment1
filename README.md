@@ -1,1 +1,1 @@
-﻿# go-assignment1s
+﻿# go-assignments
