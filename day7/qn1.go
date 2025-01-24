@@ -29,7 +29,7 @@ func main() {
 	n := 0
 	go func() {
 		mutex.Lock()
-
+		defer mutex.Unlock()
 		nIsEven := isEven(n)
 
 		time.Sleep(5 * time.Millisecond)
@@ -38,14 +38,12 @@ func main() {
 			return
 		}
 		fmt.Println(n, "is odd")
-		mutex.Unlock()
 
 	}()
 	go func() {
 		mutex.Lock()
-
+		defer mutex.Unlock()
 		n++
-		mutex.Unlock()
 	}()
 
 	// just waiting for the goroutines to finish before exiting
