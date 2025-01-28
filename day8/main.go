@@ -1,12 +1,30 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
+	"sync"
 	"time"
 )
+
+type StatusChecker interface {
+	Check(ctx context.Context, name string) (status bool, err error)
+}
+
+type httpChecker struct {
+}
+
+func (h httpChecker) Check(ctx context.Context, name string) (status bool, err error) {
+	response, err := http.Get(name)
+	if err != nil || response.StatusCode != 200 {
+		return false, err
+	}
+	return true, nil
+
+}
 
 type websites struct {
 	Data map[string]bool `json:"data"`
@@ -19,8 +37,11 @@ var res = &websites{
 var websiteStatus = map[string]string{}
 
 func main() {
+	var mutex sync.Mutex
 	go func() {
 		for {
+			mutex.Lock()
+			defer mutex.Unlock()
 			updateStatus()
 			time.Sleep(1 * time.Minute)
 		}
@@ -38,32 +59,32 @@ func main() {
 }
 
 func handleStatus(w http.ResponseWriter, r *http.Request) {
+
 	params := r.URL.Query()
 	val := params.Get("name")
 
 	if val != "" {
-		getWebsiteStatus(val, w)
+		ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
+		defer cancel()
+		var a httpChecker
+		status, err := a.Check(ctx, val)
+
+		if err != nil {
+			websiteStatus[val] = "DOWN"
+			http.Error(w, "Error getting response", http.StatusBadRequest)
+			return
+		}
+		if !status {
+			websiteStatus[val] = "DOWN"
+		} else {
+			websiteStatus[val] = "UP"
+		}
+
+		handleResponse(w, map[string]string{val: websiteStatus[val]}, http.StatusOK)
 	} else {
-		getStatus(w)
+		updateStatus()
+		handleResponse(w, websiteStatus, http.StatusOK)
 	}
-}
-
-func getWebsiteStatus(val string, w http.ResponseWriter) {
-
-	response, err := http.Get(val)
-
-	if err != nil {
-		http.Error(w, "Error getting response", http.StatusBadRequest)
-		return
-	}
-	if response.StatusCode != 200 {
-		websiteStatus[val] = "DOWN"
-		return
-	}
-
-	websiteStatus[val] = "UP"
-	handleResponse(w, map[string]string{val: websiteStatus[val]}, http.StatusOK)
-
 }
 
 func postWebsitesList(w http.ResponseWriter, r *http.Request) {
@@ -92,23 +113,21 @@ func postWebsitesList(w http.ResponseWriter, r *http.Request) {
 
 	handleResponse(w, res.Data, http.StatusOK)
 }
-func getStatus(w http.ResponseWriter) {
 
-	updateStatus()
-	handleResponse(w, websiteStatus, http.StatusOK)
-
-}
 func updateStatus() {
 	for url := range res.Data {
-		
-		response, err := http.Get(url)
+
+		ctx, cancel := context.WithTimeout(context.Background(), 500*time.Second)
+		defer cancel()
+		var a httpChecker
+		status, err := a.Check(ctx, url)
 		if err != nil {
 			res.Data[url] = false
 			websiteStatus[url] = "DOWN"
 			fmt.Println("Error getting response from website", err)
-			return
+			continue
 		}
-		if response.StatusCode == 200 {
+		if status {
 			res.Data[url] = true
 			websiteStatus[url] = "UP"
 
